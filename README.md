@@ -29,7 +29,7 @@ Desenvolver um sistema multiagente inteligente capaz de receber, classificar e r
              │
              ▼
 ┌────────────────────────────────────────────────────────────────────────┐
-│ 1. PLANEJADOR - Analista de Triagem                                    │
+│ 1. TRIAGEM                                                             │
 │    Papel: Lê o chamado do usuário e traça a estratégia de busca.       │
 │    Entrada: Reclamação do usuário (ex: "Estou sem internet").          |
 |    Saída: Um plano de ação detalhado do que precisa ser pesquisado.    │
@@ -37,7 +37,7 @@ Desenvolver um sistema multiagente inteligente capaz de receber, classificar e r
              │
              ▼
 ┌──────────────────────────────────────────────────────────────────────────┐
-│ 2. RECUPERADOR - Busca de Manuais                                        │
+│ 2. RECUPERADOR                                                           │
 │    Papel: Executa a busca na base de dados corporativa.                  │
 │    Entrada: O plano de ação do Agente 1.                                 │
 │    Saída: Os trechos dos manuais técnicos relevantes para o problema.    │
@@ -45,7 +45,7 @@ Desenvolver um sistema multiagente inteligente capaz de receber, classificar e r
              │
              ▼
 ┌────────────────────────────────────────────────────────────────────────────────┐
-│ 3. EXECUTOR - Ténico de Suporte N2                                             │
+│ 3. SUPORTE                                                                     │
 │    Papel: Analisa os manuais e redige o passo a passo final para o usuário.    │
 │    Entrada: Os documentos recuperados pelo Agente 2.                           |
 │    Saída: A solução técnica formatada e amigável para o usuário final.         | 
