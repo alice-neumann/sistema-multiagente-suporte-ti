@@ -169,7 +169,6 @@ class RAGSystem:
         """
         retrieved_docs = self.retrieve(query, top_k=1)
 
-        # Retorna dict vazio ao invés de string — evita TypeError em tools.py
         if not retrieved_docs:
             return {"context": "", "nr_documents": 0}
 

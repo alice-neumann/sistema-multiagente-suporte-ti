@@ -64,7 +64,6 @@ class ToolRegistry:
             context = result.get("context", "")
             nr_documents = result.get("nr_documents", 0)
 
-            # Sem documentos relevantes acima do threshold -> sinaliza para escalar
             if not context or nr_documents == 0:
                 return {
                     "status": "no_results",

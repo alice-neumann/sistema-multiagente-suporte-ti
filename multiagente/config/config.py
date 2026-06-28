@@ -17,7 +17,6 @@ class Config:
     CHROMA_PATH = os.getenv("CHROMA_PATH", "../chroma_db")
     COLLECTION_NAME = "suporte_ti"
 
-    # Threshold de similaridade para o RAG (distância cosseno: 0=idêntico, 1=oposto)
     # Documentos com distância acima desse valor são descartados como irrelevantes.
     SIMILARITY_THRESHOLD = float(os.getenv("SIMILARITY_THRESHOLD", "0.4"))
 

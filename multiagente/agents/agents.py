@@ -66,10 +66,7 @@ class TriageAgent:
         Returns:
             plano estruturado com passos
         """
-        # llama2: SystemMessage separada é mais eficaz para forçar idioma
-        # do que colocar a instrução dentro do HumanMessage.
-        # O template rígido de formulário evita alucinação — o modelo preenche
-        # campos fixos em vez de gerar texto livre.
+
         system = SystemMessage(content=(
             "Você é um agente de triagem de suporte de TI brasileiro. "
             "Responda SEMPRE e SOMENTE em português do Brasil. "
@@ -146,8 +143,6 @@ class RecoveryAgent:
 class SupportAgent:
     """Agente de Suporte - resolve o chamado com base na documentação ou escala para TI."""
 
-    # Mensagem padrão de escalada — usada quando não há documentação relevante.
-    # Definida como constante para garantir consistência e evitar variação do LLM.
     _RESPOSTA_ESCALADA = (
         "Olá! Seu chamado foi registrado e será encaminhado para nossa equipe "
         "especializada de TI, pois requer análise mais aprofundada.\n\n"
@@ -187,8 +182,6 @@ class SupportAgent:
             result = asyncio.run(self.__mcp_client.call_tool("get_context_for_query", query=query))
             context = result.get("context", "")
 
-        # ESCALADA AUTOMÁTICA: sem contexto relevante, não chama o LLM.
-        # Isso evita que o modelo alucine soluções ou vire chatbot.
         if _sem_contexto(context):
             return {
                 "status": "success",
@@ -199,8 +192,6 @@ class SupportAgent:
                 "escalated": True
             }
 
-        # COM contexto: llama2 responde melhor com SystemMessage separada +
-        # prompt curto e direto + "Responda em português do Brasil:" no final.
         system = SystemMessage(content=(
             "Você é um agente de Suporte de TI brasileiro. "
             "Responda SEMPRE e SOMENTE em português do Brasil. "
