@@ -101,9 +101,16 @@ class RAGSystem:
             n_results=10
         )
 
+        threshold = Config.SIMILARITY_THRESHOLD
         best_by_document = {}
-        for doc, dist, meta in zip(raw_results["documents"][0], raw_results["distances"][0], raw_results["metadatas"][0]):
-            if dist > 0.6:
+
+        for doc, dist, meta in zip(
+            raw_results["documents"][0],
+            raw_results["distances"][0],
+            raw_results["metadatas"][0]
+        ):
+            # Filtra documentos com distância acima do threshold (pouco relevantes)
+            if dist > threshold:
                 continue
 
             source_id = meta.get("original_id", "unknown")
@@ -146,21 +153,25 @@ class RAGSystem:
         except Exception:
             return []
 
-    def get_context(self, query: str, max_tokens: int = 2000) -> str | dict[str, str | int]:
+    def get_context(self, query: str, max_tokens: int = 2000) -> dict:
         """
         Gera contexto relevante para o modelo baseado na consulta.
+
+        CORREÇÃO: sempre retorna um dict com as chaves 'context' e 'nr_documents',
+        independentemente de encontrar ou não documentos relevantes.
 
         Args:
             query: texto de consulta
             max_tokens: limite aproximado de tokens no contexto
 
         Returns:
-            string com o contexto formatado
+            dict com 'context' (str) e 'nr_documents' (int)
         """
-        retrieved_docs = self.retrieve(query, top_k=3)
+        retrieved_docs = self.retrieve(query, top_k=1)
 
+        # Retorna dict vazio ao invés de string — evita TypeError em tools.py
         if not retrieved_docs:
-            return "Nenhum documento relevante encontrado na base."
+            return {"context": "", "nr_documents": 0}
 
         context_parts = []
         total_chars = 0
@@ -169,8 +180,11 @@ class RAGSystem:
             if total_chars > max_tokens * 4:  # Aproximação: 1 token ≈ 4 caracteres
                 break
 
-            part = f"## {doc['title']}\n{doc['content']}\n"
+            part = f"{doc['title']}\n{doc['content']}\n"
             context_parts.append(part)
             total_chars += len(part)
 
-        return {'context': "\n".join(context_parts), 'nr_documents': len(retrieved_docs)}
+        return {
+            "context": "\n".join(context_parts),
+            "nr_documents": len(retrieved_docs)
+        }

@@ -36,7 +36,7 @@ class ToolRegistry:
                 "results": results,
                 "count": len(results)
             }
-        
+
         except Exception as e:
             return {
                 "status": "error",
@@ -48,6 +48,10 @@ class ToolRegistry:
         """
         Obtém contexto relevante para uma consulta.
 
+        CORREÇÃO: get_context() agora sempre retorna dict.
+        Trata explicitamente o caso sem resultados, retornando
+        context="" e status="no_results" para o SupportAgent escalar.
+
         Args:
             query: texto de consulta
 
@@ -56,18 +60,34 @@ class ToolRegistry:
         """
         try:
             result = self.rag_system.get_context(query)
+
+            context = result.get("context", "")
+            nr_documents = result.get("nr_documents", 0)
+
+            # Sem documentos relevantes acima do threshold -> sinaliza para escalar
+            if not context or nr_documents == 0:
+                return {
+                    "status": "no_results",
+                    "query": query,
+                    "context": "",
+                    "nr_documents": 0,
+                    "token_estimate": 0
+                }
+
             return {
                 "status": "success",
                 "query": query,
-                "context": result['context'],
-                "nr_documents": result['nr_documents'],
-                "token_estimate": len(result['context'].split()) * 1.3
+                "context": context,
+                "nr_documents": nr_documents,
+                "token_estimate": len(context.split()) * 1.3
             }
-        
+
         except Exception as e:
             return {
                 "status": "error",
-                "message": f"Erro ao obter contexto: {str(e)}"
+                "message": f"Erro ao obter contexto: {str(e)}",
+                "context": "",
+                "nr_documents": 0
             }
 
     def search_by_category(self, category: str) -> Dict[str, Any]:
@@ -96,7 +116,7 @@ class ToolRegistry:
                 "results": results,
                 "count": len(results)
             }
-        
+
         except Exception as e:
             return {
                 "status": "error",
@@ -114,7 +134,6 @@ class ToolRegistry:
         Returns:
             resultado da validação
         """
-        
         issues = []
 
         if not query or len(query.strip()) == 0:

@@ -22,7 +22,7 @@ def print_header():
 
 
 def print_menu():
-    print("\n" + "-" * 70)
+    print("-" * 70)
     print("OPÇÕES:")
     print("  1. Abrir um novo chamado")
     print("  0. Sair do sistema")

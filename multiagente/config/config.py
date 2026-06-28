@@ -7,7 +7,7 @@ class Config:
     """Configuração da aplicação multiagente."""
 
     # Modelo Local (Ollama)
-    MODEL_NAME = os.getenv("MODEL_NAME", "gpt-oss:120b-cloud")
+    MODEL_NAME = os.getenv("MODEL_NAME", "llama2")
     MODEL_API_BASE = os.getenv("MODEL_API_BASE", "http://localhost:11434")
 
     # Embeddings
@@ -17,9 +17,12 @@ class Config:
     CHROMA_PATH = os.getenv("CHROMA_PATH", "../chroma_db")
     COLLECTION_NAME = "suporte_ti"
 
+    # Threshold de similaridade para o RAG (distância cosseno: 0=idêntico, 1=oposto)
+    # Documentos com distância acima desse valor são descartados como irrelevantes.
+    SIMILARITY_THRESHOLD = float(os.getenv("SIMILARITY_THRESHOLD", "0.4"))
+
     # MCP (Model Context Protocol)
     MCP_SERVER_URL = os.getenv("MCP_SERVER_URL", "http://127.0.0.1:8000/mcp")
-
 
     # LangGraph
     DEBUG = os.getenv("DEBUG", "False").lower() == "true"
@@ -30,6 +33,8 @@ class Config:
         return {
             "model": cls.MODEL_NAME,
             "base_url": cls.MODEL_API_BASE,
+            # Stop sequences evitam que o modelo continue gerando após a resposta
+            "stop": ["Human:", "System:", "<|im_end|>", "[INST]", "[/INST]", "###"],
         }
 
     @classmethod
