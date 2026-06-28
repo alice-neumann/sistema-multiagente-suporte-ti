@@ -1,5 +1,7 @@
 # Sistema Multiagente para Suporte de TI
 
+PROFESSOR AINDA ESTAMOS CONSERTANDO ALGUMAS COISAS
+
 ## Integrantes da Equipe
 
 - Alice Neumann | 190523
