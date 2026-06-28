@@ -1,7 +1,5 @@
 # Sistema Multiagente para Suporte de TI
 
-PROFESSOR AINDA ESTAMOS CONSERTANDO ALGUMAS COISAS
-
 ## Integrantes da Equipe
 
 - Alice Neumann | 190523
@@ -138,4 +136,65 @@ Principais bibliotecas utilizadas (`requirements.txt`):
 * **Utilitários:** `pydantic`, `numpy`, `python-dotenv`, `requests`
 
 ## Instruções para instalação e execução
+
+### Pré-requisitos
+- Python 3.10+
+- Ollama
+
+### 1. Instalar o Ollama e o modelo
+
+**Linux:**
+```bash
+curl -fsSL https://ollama.com/install.sh | sh
+ollama pull llama2
+ollama serve 
+```
+
+**Windows:**
+```cmd
+irm https://ollama.com/install.ps1 | iex
+ollama pull llama2
+ollama serve
+```
+
+### 2. Instalar dependências
+
+**Linux:**
+```bash
+cd sistema-multiagente-suporte-ti
+python -m venv venv
+source venv/bin/activate
+
+pip install -r requirements.txt
+```
+
+**Windows:**
+```cmd
+cd sistema-multiagente-suporte-ti
+python -m venv venv
+venv\Scripts\activate
+
+pip install -r requirements.txt
+```
+
+### 3. Executar o sistema
+
+O sistema requer **dois terminais abertos**:
+
+**Terminal 1 — Servidor MCP:**
+```bash
+python -m multiagente.mcp.mcp_server
+```
+
+**Terminal 2 — Sistema:**
+```bash
+python -m multiagente
+```
+
 ## Exemplos de Uso
+### Exemplo 1: redefinição de senha
+<img width="500" height="623" alt="image" src="https://github.com/user-attachments/assets/f6bff1ac-3e9e-4bb9-bec2-11027fa826cb" />
+
+### Exemplo 2: computador lento
+<img width="600" height="489" alt="image" src="https://github.com/user-attachments/assets/04fc3307-56bd-4721-822f-fc052c30f6c0" />
+
